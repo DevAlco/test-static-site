@@ -1,0 +1,44 @@
+    name: Deploy to GitHub Pages
+
+    on:
+        push:
+            branches: [ main ]
+        pull_request:
+            branches: [ main ]
+        
+    jobs:
+        build-and-deploy:
+            runs-on: ubuntu-latest
+            
+            steps:
+            #Шаг 1: Checkout
+            - name: Checkout code
+              uses: actions/checkout@v4
+              
+            #Шаг 2: настройка ноды 
+            - name: Setup node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '18'
+            
+            #Step 3: HTML static Checkout
+            - name: HTML Validation
+              uses: cyrilletuzi/validate-html@v4
+              with:
+                pattern: "**/*.html"
+                level: warning
+                
+            #Step 4: Deploy to github Pages
+            - name: Deploy to github Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_dir: ./
+                force_orphan: true
+                
+            #Step 5: Success notifycation
+            - name: Success notification
+              if: success()
+              run: |
+                echo "Сайт успешно развёрнут на github Pages"
+                echo "URL: https://${{ github.repository_owner }}.github.io/test-static-site"
