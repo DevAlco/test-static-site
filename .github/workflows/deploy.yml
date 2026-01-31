@@ -23,10 +23,10 @@
             
             #Step 3: HTML static Checkout
             - name: HTML Validation
-              uses: cyrilletuzi/validate-html@v4
+              uses: wildtechgarden/validator-html-action@main
               with:
-                pattern: "**/*.html"
-                level: warning
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                use-existing-workspace: "true"
                 
             #Step 4: Deploy to github Pages
             - name: Deploy to github Pages
